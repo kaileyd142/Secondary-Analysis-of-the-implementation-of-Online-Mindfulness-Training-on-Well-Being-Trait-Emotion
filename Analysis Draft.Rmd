@@ -18,13 +18,10 @@ NadlerDat <- read.csv("MindfulnessDataExport_NadlerCarswellMinda2020.csv")
 library(ggplot2)
 library(tidyverse)
 
-colnames(MindfulnessDat)[3] <- "group"
-
-#at the moment, the section to the next hashtag is not working as intended
 MindfulnessDat$grouping <- NA
 
 for(i in 1:nrow(MindfulnessDat)){
-  if(MindfulnessDat$group[i]=="Participant"){
+  if(MindfulnessDat$Group[i]=="Participant"){
     MindfulnessDat$grouping[i] <- 2
   }
   else{
@@ -32,17 +29,44 @@ for(i in 1:nrow(MindfulnessDat)){
   }
 }
 
-data(MindfulnessDat) %>% filter(as.numeric(grouping)=="2")
-#end
+summary(MindfulnessDat$grouping)
+MindfulnessDat$grouping <- as.numeric(MindfulnessDat$grouping)
+MindfulnessDatParticipant <- MindfulnessDat %>% filter(grouping=="2")
 
-#because the filter did not work as I intended, I am going to try a t.test with 
-#all participants to check if it will work in general
+#FFMQ questionaire used to asses well being
 
-#well being score from responses to FFMQ baseline
-colnames(NadlerDat)[24] <- "baseline_well_being"
-NadlerDat[1, 24] <- NA
-t.test(NadlerDat$baseline_well_being, mu = 3,alternative = "greater", na.rm = TRUE)
-#error, but this is the draft so we are working through it
+MindfulnessDatParticipant$FacetQuestMean <- NA
+
+for(i in 1:nrow(MindfulnessDatParticipant)){
+  MindfulnessDatParticipant$FacetQuestMean[i] <- ((MindfulnessDatParticipant$X5.facet.questionnaire.short.form[i]
+                                         +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.1[i]
+                                         +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.2[i]
+                                         +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.3[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.4[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.5[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.6[i]
+                                         +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.7[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.8[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.9[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.10[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.11[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.12[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.13[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.14[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.15[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.16[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.17[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.18[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.19[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.20[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.21[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.22[i]
+                                        +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.23[i])/24)
+}
+
+t.test(MindfulnessDatParticipant$FacetQuestMean ~ MindfulnessDatParticipant$Before.mindfulness.training.or.after, alternative = "greater", na.rm = TRUE)
+
+#Make a graph showing t test next
 ```
 
 ##Hypothesis 2 Analysis
@@ -55,17 +79,98 @@ library(ggplot2)
 library(tidyverse)
 library(car)
 
-NadlerDat$baseline_well_being2 <- NA
+#Emotional Intelligence Scores comes from MEIA questions
+MindfulnessDat$MeanMEIAWeek <- NA
+MindfulnessDat$LevelMEIA <- NA
 
-for(i in 1:nrow(NadlerDat)){
-  if(NadlerDat$baseline_well_being[i] < 3){
-    NadlerDat$baseline_well_being2[i] <- "low"
-  }else{
-    NadlerDat$baseline_well_being2[i] <- "high"
-  }
+for(i in 1:nrow(MindfulnessDat)){
+  MindfulnessDat$MeanMEIAWeek[i] <- ((MindfulnessDat$MEIA.W[i]
+                                      +MindfulnessDat$MEIA.W.1[i]
+                                      +MindfulnessDat$MEIA.W.2[i]
+                                      +MindfulnessDat$MEIA.W.3[i]
+                                      +MindfulnessDat$MEIA.W.4[i]
+                                      +MindfulnessDat$MEIA.W.5[i]
+                                      +MindfulnessDat$MEIA.W.6[i]
+                                      +MindfulnessDat$MEIA.W.7[i]
+                                      +MindfulnessDat$MEIA.W.8[i]
+                                      +MindfulnessDat$MEIA.W.9[i]
+                                      +MindfulnessDat$MEIA.W.10[i]
+                                      +MindfulnessDat$MEIA.W.11[i]
+                                      +MindfulnessDat$MEIA.W.12[i]
+                                      +MindfulnessDat$MEIA.W.13[i]
+                                      +MindfulnessDat$MEIA.W.14[i]
+                                      +MindfulnessDat$MEIA.W.15[i]
+                                      +MindfulnessDat$MEIA.W.16[i]
+                                      +MindfulnessDat$MEIA.W.17[i]
+                                      +MindfulnessDat$MEIA.W.18[i]
+                                      +MindfulnessDat$MEIA.W.19[i]
+                                      +MindfulnessDat$MEIA.W.20[i]
+                                      +MindfulnessDat$MEIA.W.21[i]
+                                      +MindfulnessDat$MEIA.W.22[i]
+                                      +MindfulnessDat$MEIA.W.23[i]
+                                      +MindfulnessDat$MEIA.W.24[i]
+                                      +MindfulnessDat$MEIA.W.25[i]
+                                      +MindfulnessDat$MEIA.W.26[i]
+                                      +MindfulnessDat$MEIA.W.27[i]
+                                      +MindfulnessDat$MEIA.W.28[i]
+                                      +MindfulnessDat$MEIA.W.29[i]
+                                      +MindfulnessDat$MEIA.W.30[i]
+                                      +MindfulnessDat$MEIA.W.31[i]
+                                      +MindfulnessDat$MEIA.W.32[i]
+                                      +MindfulnessDat$MEIA.W.33[i]
+                                      +MindfulnessDat$MEIA.W.34[i]
+                                      +MindfulnessDat$MEIA.W.35[i]
+                                      +MindfulnessDat$MEIA.W.36[i]
+                                      +MindfulnessDat$MEIA.W.37[i]
+                                      +MindfulnessDat$MEIA.W.38[i]
+                                      +MindfulnessDat$MEIA.W.39[i]
+                                      +MindfulnessDat$MEIA.W.40[i]
+                                      +MindfulnessDat$MEIA.W.41[i]
+                                      +MindfulnessDat$MEIA.W.42[i]
+                                      +MindfulnessDat$MEIA.W.43[i]
+                                      +MindfulnessDat$MEIA.W.44[i]
+                                      +MindfulnessDat$MEIA.W.45[i]
+                                      +MindfulnessDat$MEIA.W.46[i]
+                                      +MindfulnessDat$MEIA.W.47[i]
+                                      +MindfulnessDat$MEIA.W.48[i]
+                                      +MindfulnessDat$MEIA.W.49[i]
+                                      +MindfulnessDat$MEIA.W.50[i]
+                                      +MindfulnessDat$MEIA.W.51[i]
+                                      +MindfulnessDat$MEIA.W.52[i]
+                                      +MindfulnessDat$MEIA.W.53[i]
+                                      +MindfulnessDat$MEIA.W.54[i]
+                                      +MindfulnessDat$MEIA.W.55[i]
+                                      +MindfulnessDat$MEIA.W.56[i]
+                                      +MindfulnessDat$MEIA.W.57[i]
+                                      +MindfulnessDat$MEIA.W.58[i]
+                                      +MindfulnessDat$MEIA.W.59[i]
+                                      +MindfulnessDat$MEIA.W.60[i]
+                                      +MindfulnessDat$MEIA.W.61[i]
+                                      +MindfulnessDat$MEIA.W.62[i]
+                                      +MindfulnessDat$MEIA.W.63[i]
+                                      +MindfulnessDat$MEIA.W.64[i]
+                                      +MindfulnessDat$MEIA.W.65[i]
+                                      +MindfulnessDat$MEIA.W.66[i]
+                                      +MindfulnessDat$MEIA.W.67[i]
+                                      +MindfulnessDat$MEIA.W.68[i]
+                                      +MindfulnessDat$MEIA.W.69[i]
+                                      +MindfulnessDat$MEIA.W.70[i]
+                                      +MindfulnessDat$MEIA.W.71[i])/72)
 }
-#error, but this is a step to figure out
 
-#in essence the anova test would compare the high to the low groups, in the after
-#section for a comparison between the control and participant groups
+mean(MindfulnessDat$MeanMEIAWeek, na.rm = TRUE)
+
+#for(i in 1:nrow(MindfulnessDat)){
+#  if(MindfulnessDat$MeanMEIAWeek[i] > 3.56){
+#    MindfulnessDat$LevelMEIA[i] <- "high"
+#  }
+#  else{
+#    MindfulnessDat$LevelMEIA[i] <- "low"
+#  }
+#}
+#I'm pretty sure the code above keeps outputing an error, because 2 of the Mean
+#MEIA scores output as 'NA'
+
+#after creating the high/low split, an Anova would be done on a linear model
+#created from FFMQ scores on the high/low split * before/after split
 ```
