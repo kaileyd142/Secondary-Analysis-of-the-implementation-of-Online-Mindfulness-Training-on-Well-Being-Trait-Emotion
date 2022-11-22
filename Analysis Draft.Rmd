@@ -4,15 +4,24 @@ output: html_document
 date: "2022-11-22"
 ---
 
+##Overview:
+Hypothesis 1: The mean well being score of participants will be significantly higher in the group that underwent mindfulness training
+
+Hypothesis 2: There will be a positive correlation with a high R squared when comparing well being and competency ratings
+
+Hypothesis 3: There will be a significant increase in the mean well being of individuals with high emotional intelligence scores
+
+We will be using a one-tailed t-test for our first hypothesis, a correlational analysis for our second hypothesis, and a two factor ANOVA for our third hypothesis. Link to preregistration with more information about data and analyses (https://doi.org/10.17605/OSF.IO/SJWM9)
+
+
 ##Data Cleaning
-
 ```{r}
-setwd("C:/Users/Peyto/Downloads")
-MindfulnessDat <- read.csv("MindfulnessData_fullunmatched_raw_items_NadlerCarswellMinda.csv")
-NadlerDat <- read.csv("MindfulnessDataExport_NadlerCarswellMinda2020.csv")
-```
+MindfulnessDat<- read.csv("C:/Users/kaile/Downloads/MindfulnessData_fullunmatched_raw_items_NadlerCarswellMinda.csv", header=TRUE)
+NadlerDat<- read.csv("C:/Users/kaile/Downloads/MindfulnessDataExport_NadlerCarswellMinda2020.csv", header=TRUE, dec=",")
 
-##Hypothesis 1 Analysis
+
+#Will be meeting with Dr. Woodward to clean multiple headings on datasets and address the weird column situation on MindfulnessDat.
+```
 
 ```{r}
 library(ggplot2)
@@ -69,7 +78,66 @@ t.test(MindfulnessDatParticipant$FacetQuestMean ~ MindfulnessDatParticipant$Befo
 #Make a graph showing t test next
 ```
 
+##Hypothesis 1 Analysis
+```{r}
+library(ggplot2)
+library(tidyverse)
+colnames(MindfulnessDat)[3] <- "group"
+#at the moment, the section to the next hashtag is not working as intended
+MindfulnessDat$grouping <- NA
+for(i in 1:nrow(MindfulnessDat)){
+  if(MindfulnessDat$group[i]=="Participant"){
+    MindfulnessDat$grouping[i] <- 2
+  }
+  else{
+    MindfulnessDat$grouping[i] <- 1
+  }
+} <- #Does not work at the moment
+data(MindfulnessDat) %>% filter(as.numeric(grouping)=="2") <- #also not working
+#end
+#because the filter did not work as I intended, I am going to try a t.test with 
+#all participants to check if it will work in general
+#well being score from responses to FFMQ baseline
+colnames(NadlerDat)[24] <- "baseline_well_being"
+NadlerDat[1, 24] <- NA
+t.test(NadlerDat$baseline_well_being, mu = 3,alternative = "greater", na.rm = TRUE)
+#error, but this is the draft so we are working through it
+```
+
 ##Hypothesis 2 Analysis
+```{r}
+#running a correlational analysis between well being and competency ratings. First we need to clean up the data from above, but there is an issue with multiple headers and anchoring information on the MindfullnessDat data set that needs to be addressed with Dr. Woodward.
+
+mean(MindfulnessDat$wellbeing)
+mean(MindfulnessDat$competency)
+cor.test(MindfulnessDat$wellbeing~ MindfulnessDat$competency)
+library(ggplot2)
+ggplot(MindfullnessDat, aes(wellbeing, competency)) + geom_point() + geom_smooth(method = "lm")
+
+#R^2
+cor("y actual", "y predict")^2
+
+```
+
+##Hypothesis 3 Analysis
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(car)
+NadlerDat$baseline_well_being2 <- NA
+for(i in 1:nrow(NadlerDat)){
+  if(NadlerDat$baseline_well_being[i] < 3){
+    NadlerDat$baseline_well_being2[i] <- "low"
+  }else{
+    NadlerDat$baseline_well_being2[i] <- "high"
+  }
+}
+#error, but this is a step to figure out
+#in essence the anova test would compare the high to the low groups, in the after
+
+lmH3<- lm("put in cleaned variables here")
+library(car)
+Anova(lmH3)
 
 
 ##Hypothesis 3 Analysis
