@@ -38,8 +38,8 @@ for(i in 1:nrow(MindfulnessDat)){
   else{
     MindfulnessDat$grouping[i] <- 1
   }
-}
-data(MindfulnessDat) %>% filter(as.numeric(grouping)=="2")
+} <- #Does not work at the moment
+data(MindfulnessDat) %>% filter(as.numeric(grouping)=="2") <- #also not working
 #end
 #because the filter did not work as I intended, I am going to try a t.test with 
 #all participants to check if it will work in general
