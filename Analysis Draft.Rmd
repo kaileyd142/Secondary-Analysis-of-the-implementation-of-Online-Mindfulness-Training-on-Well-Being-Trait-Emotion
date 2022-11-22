@@ -4,5 +4,13 @@ output: html_document
 date: "2022-11-22"
 ---
 
+##Data Cleaning
 
 
+##Hypothesis 1 Analysis
+
+
+##Hypothesis 2 Analysis
+
+
+##Hypothesis 3 Analysis
