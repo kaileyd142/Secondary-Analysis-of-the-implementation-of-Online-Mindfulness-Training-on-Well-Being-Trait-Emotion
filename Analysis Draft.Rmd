@@ -16,9 +16,9 @@ We will be using a one-tailed t-test for our first hypothesis, a correlational a
 
 ##Data Cleaning
 ```{r}
-MindfulnessDat<- read.csv("C:/Users/kaile/Downloads/MindfulnessData_fullunmatched_raw_items_NadlerCarswellMinda.csv", header=FALSE)
+MindfulnessDat<- read.csv("C:/Users/kaile/Downloads/MindfulnessData_fullunmatched_raw_items_NadlerCarswellMinda.csv", header=TRUE)
 
-NadlerDat<- read.csv("C:/Users/kaile/Downloads/MindfulnessDataExport_NadlerCarswellMinda2020.csv", header=FALSE, dec=",")
+NadlerDat<- read.csv("C:/Users/kaile/Downloads/MindfulnessDataExport_NadlerCarswellMinda2020.csv", header=TRUE, dec=",")
 
 #Will be meeting with Dr. Woodward to clean multiple headings on datasets and address the weird column situation on MindfulnessDat.
 ```
