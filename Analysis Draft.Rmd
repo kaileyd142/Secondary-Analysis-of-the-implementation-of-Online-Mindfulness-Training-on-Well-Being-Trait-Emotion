@@ -16,18 +16,12 @@ We will be using a one-tailed t-test for our first hypothesis, a correlational a
 
 ##Data Cleaning
 ```{r}
-<<<<<<< HEAD
-setwd("C:/Users/kaile/Downloads")
+setwd("C:/Users/kaile/OneDrive/Desktop/R Projects/Secondary-Analysis-of-the-implementation-of-Online-Mindfulness-Training-on-Well-Being-Trait-Emotion")
 
 MindfulnessDat<- read.csv("C:/Users/kaile/Downloads/MindfulnessData_fullunmatched_raw_items_NadlerCarswellMinda (1).csv", dec=",")
 
-=======
-MindfulnessDat<- read.csv("C:/Users/kaile/Downloads/MindfulnessData_fullunmatched_raw_items_NadlerCarswellMinda.csv", header=TRUE)
->>>>>>> 0fa5fd5d4bf3500c3a4bb68265e621c3276837d1
 NadlerDat<- read.csv("C:/Users/kaile/Downloads/MindfulnessDataExport_NadlerCarswellMinda2020.csv", header=TRUE, dec=",")
 
-
-#Will be meeting with Dr. Woodward to clean multiple headings on datasets and address the weird column situation on MindfulnessDat.
 ```
 
 
@@ -55,7 +49,7 @@ MindfulnessDatParticipant <- MindfulnessDat %>% filter(grouping=="2")
 
 MindfulnessDatParticipant$FacetQuestMean <- NA
 
-for(i in 1:nrow(MindfulnessDatParticipant)){
+for(i in 1:nrow(MindfulnessDatParticipant)) {
   MindfulnessDatParticipant$FacetQuestMean[i] <- ((MindfulnessDatParticipant$X5.facet.questionnaire.short.form[i]
                                          +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.1[i]
                                          +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.2[i]
@@ -89,17 +83,33 @@ t.test(MindfulnessDatParticipant$FacetQuestMean ~ MindfulnessDatParticipant$Befo
 
 ##Hypothesis 2 Analysis
 ```{r}
-#running a correlational analysis between well being and competency ratings. First we need to clean up the data from above, but there is an issue with multiple headers and anchoring information on the MindfullnessDat data set that needs to be addressed with Dr. Woodward.
+#running a correlational analysis between well being and competency ratings.
 
-mean(MindfulnessDat$wellbeing)
-mean(MindfulnessDat$competency)
-cor.test(MindfulnessDat$wellbeing~ MindfulnessDat$competency)
+MindfulnessDatParticipant$Competency <- NA
+
+for(i in 1:nrow(MindfulnessDatParticipant)){
+  MindfulnessDatParticipant$Competency[i] <- ((MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.1[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.2[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.3[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.4[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.5[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.6[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.7[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.8[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.9[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.10[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.11[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.12[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.13[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.14[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.15[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.16[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.17[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.18[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.19[i])/20)}
+
+cor(MindfulnessDatParticipant$Competency, MindfulnessDatParticipant$FacetQuestMean)
+
 library(ggplot2)
-ggplot(MindfullnessDat, aes(wellbeing, competency)) + geom_point() + geom_smooth(method = "lm")
+ggplot(MindfulnessDatParticipant, aes(FacetQuestMean, Competency)) + geom_point() + geom_smooth(method = "lm")
 
-#R^2
-cor("y actual", "y predict")^2
 
+MindfulnessDatParticipant$Competency2 <- NA
+
+for(i in 1:nrow(MindfulnessDatParticipant)){  
+  MindfulnessDatParticipant$Competency[i] <- ((MindfulnessDatParticipant$Brief.Resilience.Scale[i] +MindfulnessDatParticipant$Brief.Resilience.Scale.1[i] +MindfulnessDatParticipant$Brief.Resilience.Scale.2[i]                                      +MindfulnessDatParticipant$Brief.Resilience.Scale.3[i] +MindfulnessDatParticipant$Brief.Resilience.Scale.4[i] +MindfulnessDatParticipant$Brief.Resilience.Scale.5[i])/6)}
+
+
+cor(MindfulnessDatParticipant$Competency2, MindfulnessDatParticipant$FacetQuestMean)
+
+library(ggplot2)
+ggplot(MindfulnessDatParticipant, aes(FacetQuestMean, Competency2)) + geom_point() + geom_smooth(method = "lm")
+
+
+
+#R^2 will use cor("y actual", "y predict")^2, but the variables used for y predict are being finalized
 ```
 
 
