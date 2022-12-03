@@ -82,6 +82,37 @@ for(i in 1:nrow(MindfulnessDatParticipant)) {
 }
 ```
 
+##Wellbeing Data Hypothesis 3
+```{r}
+MindfulnessDat$FacetQuestMean <- NA
+for(i in 1:nrow(MindfulnessDat)) {
+  MindfulnessDat$FacetQuestMean[i] <- ((MindfulnessDat$X5.facet.questionnaire.short.form[i]
+                                         +MindfulnessDat$X5.facet.questionnaire.short.form.1[i]
+                                         +MindfulnessDat$X5.facet.questionnaire.short.form.2[i]
+                                         +MindfulnessDat$X5.facet.questionnaire.short.form.3[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.4[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.5[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.6[i]
+                                         +MindfulnessDat$X5.facet.questionnaire.short.form.7[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.8[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.9[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.10[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.11[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.12[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.13[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.14[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.15[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.16[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.17[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.18[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.19[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.20[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.21[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.22[i]
+                                        +MindfulnessDat$X5.facet.questionnaire.short.form.23[i])/24)
+}
+```
+
 ###Competency Data
 ```{r}
 MindfulnessDatParticipant$Competency <- NA
@@ -235,8 +266,9 @@ ggplot(MindfulnessDatParticipant, aes(FacetQuestMean, Competency2)) + geom_point
 ```{r}
 mean(MindfulnessDat$MeanMEIAWeek, na.rm = TRUE)
 
-#after creating the high/low split, an Anova would be done on a linear model
-#created from FFMQ scores on the high/low split * before/after split
-#lmH3<- lm("put in cleaned variables here")
-#Anova(lmH3)
+lmH3<- lm(MindfulnessDat$FacetQuestMean ~ MindfulnessDat$LevelMEIA)
+Anova(lmH3)
+```
+```{r}
+ggplot(MindfulnessDat, aes(MeanMEIAWeek, FacetQuestMean, fill = LevelMEIA)) + geom_point(shape = 21)+ geom_smooth(method = "lm")+ xlab("Emotional Intelligence Mean Score")+ ylab("Well Being Mean Score")
 ```
