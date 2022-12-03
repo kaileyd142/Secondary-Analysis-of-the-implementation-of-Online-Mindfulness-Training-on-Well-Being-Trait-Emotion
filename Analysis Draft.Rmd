@@ -14,7 +14,14 @@ Hypothesis 3: There will be a significant increase in the mean well being of ind
 We will be using a one-tailed t-test for our first hypothesis, a correlational analysis for our second hypothesis, and a two factor ANOVA for our third hypothesis. Link to preregistration with more information about data and analyses (https://doi.org/10.17605/OSF.IO/SJWM9)
 
 
-##Data Cleaning
+```{r libraries, include=FALSE}
+library(ggplot2)
+library(tidyverse)
+library(car)
+```
+
+
+##Data Set-up
 ```{r}
 setwd("C:/Users/kaile/OneDrive/Desktop/R Projects/Secondary-Analysis-of-the-implementation-of-Online-Mindfulness-Training-on-Well-Being-Trait-Emotion")
 
@@ -24,12 +31,10 @@ NadlerDat<- read.csv("C:/Users/kaile/Downloads/MindfulnessDataExport_NadlerCarsw
 
 ```
 
+##Data Cleaning
 
-##Hypothesis 1 Analysis
+###Mindfullness Data
 ```{r}
-library(ggplot2)
-library(tidyverse)
-
 MindfulnessDat$grouping <- NA
 
 for(i in 1:nrow(MindfulnessDat)){
@@ -41,12 +46,12 @@ for(i in 1:nrow(MindfulnessDat)){
   }
 }
 
-summary(MindfulnessDat$grouping)
 MindfulnessDat$grouping <- as.numeric(MindfulnessDat$grouping)
 MindfulnessDatParticipant <- MindfulnessDat %>% filter(grouping=="2")
+```
 
-#FFMQ questionaire used to asses well being
-
+###Wellbeing Data
+```{r}
 MindfulnessDatParticipant$FacetQuestMean <- NA
 
 for(i in 1:nrow(MindfulnessDatParticipant)) {
@@ -75,54 +80,24 @@ for(i in 1:nrow(MindfulnessDatParticipant)) {
                                         +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.22[i]
                                         +MindfulnessDatParticipant$X5.facet.questionnaire.short.form.23[i])/24)
 }
-
-t.test(MindfulnessDatParticipant$FacetQuestMean ~ MindfulnessDatParticipant$Before.mindfulness.training.or.after, alternative = "greater", na.rm = TRUE)
-
-#Make a graph showing t test next
 ```
 
-##Hypothesis 2 Analysis
+###Competency Data
 ```{r}
-#running a correlational analysis between well being and competency ratings.
-
 MindfulnessDatParticipant$Competency <- NA
 
 for(i in 1:nrow(MindfulnessDatParticipant)){
   MindfulnessDatParticipant$Competency[i] <- ((MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.1[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.2[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.3[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.4[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.5[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.6[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.7[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.8[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.9[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.10[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.11[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.12[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.13[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.14[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.15[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.16[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.17[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.18[i] +MindfulnessDatParticipant$Positive.and.Negative.Affect.Schedule.19[i])/20)}
 
-cor(MindfulnessDatParticipant$Competency, MindfulnessDatParticipant$FacetQuestMean)
-
-library(ggplot2)
-ggplot(MindfulnessDatParticipant, aes(FacetQuestMean, Competency)) + geom_point() + geom_smooth(method = "lm")
-
-
 MindfulnessDatParticipant$Competency2 <- NA
 
 for(i in 1:nrow(MindfulnessDatParticipant)){  
-  MindfulnessDatParticipant$Competency[i] <- ((MindfulnessDatParticipant$Brief.Resilience.Scale[i] +MindfulnessDatParticipant$Brief.Resilience.Scale.1[i] +MindfulnessDatParticipant$Brief.Resilience.Scale.2[i]                                      +MindfulnessDatParticipant$Brief.Resilience.Scale.3[i] +MindfulnessDatParticipant$Brief.Resilience.Scale.4[i] +MindfulnessDatParticipant$Brief.Resilience.Scale.5[i])/6)}
-
-
-cor(MindfulnessDatParticipant$Competency2, MindfulnessDatParticipant$FacetQuestMean)
-
-library(ggplot2)
-ggplot(MindfulnessDatParticipant, aes(FacetQuestMean, Competency2)) + geom_point() + geom_smooth(method = "lm")
-
-
-
-#R^2 will use cor("y actual", "y predict")^2, but the variables used for y predict are being finalized
+  MindfulnessDatParticipant$Competency2[i] <- ((MindfulnessDatParticipant$Brief.Resilience.Scale[i] +MindfulnessDatParticipant$Brief.Resilience.Scale.1[i] +MindfulnessDatParticipant$Brief.Resilience.Scale.2[i]                                +MindfulnessDatParticipant$Brief.Resilience.Scale.3[i] +MindfulnessDatParticipant$Brief.Resilience.Scale.4[i] +MindfulnessDatParticipant$Brief.Resilience.Scale.5[i])/6)}
 ```
 
-
-##Hypothesis 3 Analysis
-
+###Emotional Intelligence Data
 ```{r}
-library(ggplot2)
-library(tidyverse)
-library(car)
-
-#Emotional Intelligence Scores comes from MEIA questions
 MindfulnessDat$MeanMEIAWeek <- NA
-MindfulnessDat$LevelMEIA <- NA
 
 for(i in 1:nrow(MindfulnessDat)){
   MindfulnessDat$MeanMEIAWeek[i] <- ((MindfulnessDat$MEIA.W[i]
@@ -199,18 +174,66 @@ for(i in 1:nrow(MindfulnessDat)){
                                       +MindfulnessDat$MEIA.W.71[i])/72)
 }
 
-mean(MindfulnessDat$MeanMEIAWeek, na.rm = TRUE)
+```
 
-#for(i in 1:nrow(MindfulnessDat)){
-#  if(MindfulnessDat$MeanMEIAWeek[i] > 3.56){
-#    MindfulnessDat$LevelMEIA[i] <- "high"
-#  }
-#  else{
-#    MindfulnessDat$LevelMEIA[i] <- "low"
-#  }
-#}
-#I'm pretty sure the code above keeps outputing an error, because 2 of the Mean
-#MEIA scores output as 'NA'
+###Emotional Intelligence Level Data
+```{r}
+MindfulnessDat$LevelMEIA <- NA
+
+for(i in 1:nrow(MindfulnessDat)){
+  if(MindfulnessDat$MeanMEIAWeek[i] > 3.56 || is.na(MindfulnessDat$MeanMEIAWeek)[i]== TRUE){
+    MindfulnessDat$LevelMEIA[i] <- "high"
+  }
+  else{
+    MindfulnessDat$LevelMEIA[i] <- "low"
+  }
+}
+```
+
+
+##Hypothesis 1 Analysis
+###Paired samples t-test
+```{r}
+t.test(MindfulnessDatParticipant$FacetQuestMean ~ MindfulnessDatParticipant$Before.mindfulness.training.or.after, alternative = "greater", var.equal= TRUE, na.rm = TRUE)
+
+```
+
+```{r, include= FALSE}
+sd1 <- sd(MindfulnessDatParticipant$FacetQuestMean, na.rm = TRUE)
+```
+
+```{r}
+ggplot(MindfulnessDatParticipant, aes(Before.mindfulness.training.or.after, FacetQuestMean), na.rm = TRUE) + geom_bar(stat = 'identity', position = position_dodge(), fill = "darkblue") + ggtitle("Mindfulness before and after training") + xlab("") + ylab("Mindfulness") + geom_errorbar(aes(ymin= FacetQuestMean-sd1, ymax= FacetQuestMean + sd1)) 
+#Fix error bars
+```
+
+
+##Hypothesis 2 Analysis
+
+###Competency Correlation 1: A correlation was run on Mindfulness and Competency based on Positive or Negative Affect. We are also calculating variance through R^2.
+```{r}
+comp1lm <- lm(Competency~FacetQuestMean, data = MindfulnessDatParticipant)
+summary(comp1lm)
+```
+
+```{r}
+ggplot(MindfulnessDatParticipant, aes(FacetQuestMean, Competency)) + geom_point() + geom_smooth(method = "lm") + xlab("Mindfulness") + ylab("Competency") +ggtitle("Correlation between Mindfullness and Competency Measure 1")
+```
+
+###Competency Correlation 2: A correlation was run on Mindfulnes and Competency based on Resilience Scale. We are also calculating variance through R^2.
+```{r}
+comp2lm <- lm(Competency2~FacetQuestMean, data = MindfulnessDatParticipant)
+summary(comp2lm)
+```
+
+```{r}
+ggplot(MindfulnessDatParticipant, aes(FacetQuestMean, Competency2)) + geom_point() + geom_smooth(method = "lm") + xlab("Mindfulness") + ylab("Competency") +ggtitle("Correlation between Mindfullness and Competency Measure 2")
+```
+
+
+##Hypothesis 3 Analysis
+```{r}
+mean(MindfulnessDat$MeanMEIAWeek, na.rm = TRUE)
 
 #after creating the high/low split, an Anova would be done on a linear model
 #created from FFMQ scores on the high/low split * before/after split
